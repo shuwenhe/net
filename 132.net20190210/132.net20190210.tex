@@ -1,0 +1,48 @@
+%\documentclass{article}  
+\documentclass[12pt,a4paper,openany,fleqn]{book} %声明文档类型
+
+\usepackage{lipsum}
+\usepackage[colorlinks]{hyperref}
+\renewcommand{\contentsname}{\centerline{目录}}
+
+\usepackage{xeCJK} % 中文
+\usepackage{listings} % 插入代码
+\usepackage{xcolor} % 代码颜色
+
+%
+% 插入代码
+%
+\lstset{language=C++}%这条命令可以让LaTeX 排版时将C++ 键字突出显示
+\lstset{breaklines}%这条命令可以让LaTeX自动将长的代码行换行排版
+\lstset{extendedchars=false}% 这一条命令可以解决代码跨页时，章节标题，页眉等汉字不显示的问题
+\lstset{
+    numbers=left,
+    numberstyle= \tiny,
+    keywordstyle= \color{ blue!70},
+    commentstyle= \color{red!50!green!50!blue!50},
+    frame=shadowbox, % 阴影效果
+    rulesepcolor= \color{ red!20!green!20!blue!20} ,
+    escapeinside=``, % 英文分号中可写入中文
+    xleftmargin=2em,xrightmargin=2em, aboveskip=1em,
+    framexleftmargin=2em,
+}
+
+\setlength\parskip{\baselineskip}% 增加空行%
+\setcounter{tocdepth}{4}%控制目录2 级
+\setcounter{secnumdepth}{5}%题号显示层级深度
+
+\begin{document}  
+\tableofcontents
+
+%
+%
+%
+\chapter{rcu}
+\section{rcu}
+RCU(Read-Copy Update)，是 Linux 中比较重要的一种同步机制。顾名思义就是“读，拷贝更新”，再直白点是“随意读，但更新数据的时候，需要先复制一份副本，在副本上完成修改，再一次性地替换旧数据”。这是 Linux 内核实现的一种针对“读多写少”的共享数据的同步机制。
+
+不同于其他的同步机制，它允许多个读者同时访问共享数据，而且读者的性能不会受影响（“随意读”），读者与写者之间也不需要同步机制（但需要“复制后再写”），但如果存在多个写者时，在写者把更新后的“副本”覆盖到原数据时，写者与写者之间需要利用其他同步机制保证同步。
+
+RCU 的一个典型的应用场景是链表，在 Linux kernel 中还专门提供了一个头文件（include/linux/rculist.h），提供了利用 RCU 机制对链表进行增删查改操作的接口。
+
+\end{document}  
